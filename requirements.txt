@@ -1,0 +1,5 @@
+# mysql conn
+PyMySQL==0.9.3
+
+# template
+Jinja2==2.10.3
