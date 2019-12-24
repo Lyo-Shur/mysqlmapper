@@ -4,31 +4,31 @@ import re
 
 def sql_builder(template, parameter):
     """
-    组建SQL语句
-    :param template: 初始jinja2模板
-    :param parameter: 渲染参数
-    :return: 渲染结果
+    Build SQL string
+    :param template: Init jinja2 template
+    :param parameter: Parameter
+    :return: Jinja2 template return
     """
-    # 组建模板
+    # Build template
     template = Template(_parsing(template))
-    # 渲染模板
+    # Render parameter
     template = template.render(parameter)
-    # 提取参数
+    # Extract_parameters
     result, parameters = _extract_parameters(template)
-    # 执行清洗
+    # Clean string
     result = _trim(result)
-    # 执行补丁
+    # Execution patch
     result = _deal_with_update(result)
     parameters = _deal_with_limit(result, parameters)
-    # 返回渲染结果
+    # Return rendering results
     return result, parameters
 
 
 def _parsing(template):
     """
-    拓展原生jinja2语法，便于支持参数化查询
-    :param template: 原始字符串
-    :return: 转换后的结果
+    Extend the native jinja2 syntax to support parameterized queries
+    :param template: Original string
+    :return: Converted results
     """
     result = template
     rule = r'(#{)(.*?)(})'
@@ -41,9 +41,9 @@ def _parsing(template):
 
 def _extract_parameters(template):
     """
-    参数提取
-    :param template: 待提取参数的模板
-    :return: 提取结果
+    Parameter extraction
+    :param template: Template of parameters to be extracted
+    :return: Extraction results
     """
     result = template
     parameters = []
@@ -59,9 +59,9 @@ def _extract_parameters(template):
 
 def _trim(template):
     """
-    对SQL语句执行清洗
-    :param template: 待清洗的SQL语句
-    :return: 清洗结果
+    Cleaning SQL statements
+    :param template: SQL statement to be cleaned
+    :return: Cleaning result
     """
     template = template.strip()
     template = template.replace("\n", " ")
@@ -76,9 +76,9 @@ def _trim(template):
 
 def _deal_with_update(template):
     """
-    针对更新语句的补丁，避免更新set出现多余的逗号
-    :param template: 模板
-    :return: 处理后的结果
+    For the patch of UPDATE statement, avoid redundant commas in update set
+    :param template: Template
+    :return: Results after treatment
     """
     up_template = template.upper()
     index_update = up_template.find("UPDATE")
@@ -98,9 +98,9 @@ def _deal_with_update(template):
 
 def _deal_with_limit(template, parameters):
     """
-    处理limit补丁
-    :param template: 模板
-    :return: 处理后的结果
+    Handle limit patch
+    :param template: Template
+    :return: Results after treatment
     """
     up_template = template.upper()
     index = up_template.find("LIMIT")

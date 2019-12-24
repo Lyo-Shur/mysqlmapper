@@ -4,9 +4,9 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
     setup(
         name="mysqlmapper",
-        version="0.0.1",
+        version="0.0.2",
         description=(
-            "python用的mysql查询工具类。"
+            "MySQL query tool class used by python."
         ),
         keywords="mysql orm",
         long_description=open('README.md', 'r').read(),

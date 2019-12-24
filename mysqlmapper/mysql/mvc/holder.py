@@ -5,24 +5,24 @@ from mysqlmapper.mysql.mvc.service import Service
 
 class MVCHolder:
     """
-    MVC保持器
+    MVC retainer
     """
 
-    # 数据库连接
+    # Database connection
     conn_holder = None
-    # 数据库描述信息
+    # Database description information
     database_info = None
-    # service字典
+    # Service dictionary
     services = None
 
     def __init__(self, host, user, password, database, charset="utf8"):
         """
-        初始化MVC保持器
-        :param host: 主机名
-        :param user: 用户名
-        :param password: 密码
-        :param database: 数据库名
-        :param charset: 编码格式
+        Initialize MVC holder
+        :param host: host name
+        :param user: User name
+        :param password: Password
+        :param database: Database name
+        :param charset: Encoding format
         """
         self.conn_holder = ConnHolder(host, user, password, database, charset)
         self.database_info = get_db_info(self.conn_holder.get_conn(), database)

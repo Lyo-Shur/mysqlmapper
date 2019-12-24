@@ -1,24 +1,24 @@
 import json
 
 
-# 数据传输工具类
+# Data transmission tool class
 from datetime import datetime
 
 
 class CodeModeDTO:
-    # 状态码
+    # Status code
     code = 0
-    # 消息体
+    # Message body
     message = ""
-    # 数据体
+    # Data volume
     data = {}
 
     def __init__(self, code, message, data):
         """
-        初始化状态传输工具类
-        :param code: 状态码
-        :param message: 消息体
-        :param data: 数据体
+        Initialization status transfer tool class
+        :param code: Status code
+        :param message: Message body
+        :param data: Data volume
         """
         self.code = code
         self.message = message
@@ -26,21 +26,28 @@ class CodeModeDTO:
 
     def to_json(self):
         """
-        转为Json对象
+        Convert to JSON object
         :return:
         """
-        if isinstance(self.data, datetime):
-            return json.dumps({
-                "code": self.code,
-                "message": self.message,
-                "data": self.data.strftime('%Y-%m-%d %H:%M:%S')
-            }, ensure_ascii=False)
-        if isinstance(self.data, tuple) or isinstance(self.data, list):
-            for i in range(0, len(self.data)):
-                if isinstance(self.data[i], datetime):
-                    self.data[i] = self.data[i].strftime('%Y-%m-%d %H:%M:%S')
-        if isinstance(self.data, dict):
-            for key in self.data.keys():
-                if isinstance(self.data[key], datetime):
-                    self.data[key] = self.data[key].strftime('%Y-%m-%d %H:%M:%S')
-        return json.dumps({"code": self.code, "message": self.message, "data": self.data}, ensure_ascii=False)
+        self.data = self._parse_time(self.data)
+        return json.dumps({
+            "code": self.code,
+            "message": self.message,
+            "data": self.data
+        })
+
+    def _parse_time(self, data):
+        """
+        Recursive processing time format
+        :param data: Data to be processed
+        :return: Processing result
+        """
+        if isinstance(data, datetime):
+            data = data.strftime('%Y-%m-%d %H:%M:%S')
+        if isinstance(data, tuple) or isinstance(data, list):
+            for i in range(0, len(data)):
+                data[i] = self._parse_time(data[i])
+        if isinstance(data, dict):
+            for key in data.keys():
+                data[key] = self._parse_time(data[key])
+        return data

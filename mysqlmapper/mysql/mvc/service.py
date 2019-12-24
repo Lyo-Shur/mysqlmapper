@@ -3,63 +3,63 @@ from mysqlmapper.mysql.mvc.dao import DAO
 
 class Service:
     """
-    基础的Service层
+    Basic service layer
     """
     _dao = None
 
     def __init__(self, conn, database_info, table_name):
         """
-        初始化Service层
-        :param conn: 数据库连接
-        :param database_info: 数据库信息
-        :param table_name: 表名
+        Initialize service layer
+        :param conn: Database connection
+        :param database_info: database information
+        :param table_name: Table name
         """
         self._dao = DAO(conn, database_info, table_name)
 
     def get_list(self, parameter):
         """
-        获取数据列表
-        :param parameter: 搜索参数
-        :return: 数据列表
+        Get data list
+        :param parameter: Search parameters
+        :return: Data list
         """
         return self._dao.get_list(parameter)
 
     def get_count(self, parameter):
         """
-        获取数量
-        :param parameter: 搜索参数
-        :return: 数量
+        Quantity acquisition
+        :param parameter: Search parameters
+        :return: Number
         """
         return self._dao.get_count(parameter)
 
     def get_model(self, parameter):
         """
-        获取记录实体
-        :param parameter: 搜索参数
-        :return: 记录实体
+        Get record entity
+        :param parameter: Search parameters
+        :return: Record entity
         """
         return self._dao.get_model(parameter)
 
     def update(self, parameter):
         """
-        更新记录
-        :param parameter: 更新数据
-        :return: 更新结果
+        Update record
+        :param parameter: Update data
+        :return: Update results
         """
         return self._dao.update(parameter)
 
     def insert(self, parameter):
         """
-        插入记录
-        :param parameter: 插入数据
-        :return: 插入结果
+        insert record
+        :param parameter: insert data
+        :return: Insert results
         """
         return self._dao.insert(parameter)
 
     def delete(self, parameter):
         """
-        删除数据
-        :param parameter: 删除数据
-        :return: 删除结果
+        Delete data
+        :param parameter: Delete data
+        :return: Delete result
         """
         return self._dao.delete(parameter)

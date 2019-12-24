@@ -2,28 +2,28 @@
 
 class Engine:
     """
-    SQL执行引擎
+    SQL Execution Engine
     """
     @staticmethod
     def query(conn, sql, parameter):
         """
-        查询列表信息
-        :param conn: 数据库连接
-        :param sql: 待执行的SQL语句
-        :param parameter: 参数
-        :return: 查询结果
+        Query list information
+        :param conn: Database connection
+        :param sql: SQL statement to be executed
+        :param parameter: parameter
+        :return: Query results
         """
-        # 获取游标
+        # Get cursor
         cursor = conn.cursor()
-        # 执行SQL
+        # Implementation of SQL
         cursor.execute(sql, parameter)
-        # 提交操作
+        # Submit operation
         conn.commit()
-        # 获取表头
+        # Get table header
         names = []
         for i in cursor.description:
             names.append(i[0])
-        # 获取结果集
+        # Get result set
         results = []
         for i in cursor.fetchall():
             result = {}
@@ -36,11 +36,11 @@ class Engine:
     @staticmethod
     def count(conn, sql, parameter):
         """
-        查询数量信息
-        :param conn: 数据库连接
-        :param sql: 待执行的SQL语句
-        :param parameter: 参数
-        :return: 查询结果
+        Query quantity information
+        :param conn: Database connection
+        :param sql: SQL statement to be executed
+        :param parameter: parameter
+        :return: Query results
         """
         result = Engine.query(conn, sql, parameter)
         if len(result) == 0:
@@ -51,22 +51,22 @@ class Engine:
     @staticmethod
     def exec(conn, sql, parameter):
         """
-        执行SQL语句
-        :param conn: 数据库连接
-        :param sql: 待执行的SQL语句
-        :param parameter: 参数
-        :return: 最后一次插入ID，影响行数
+        Execute SQL statement
+        :param conn: Database connection
+        :param sql: SQL statement to be executed
+        :param parameter: parameter
+        :return: Last inserted ID, affecting number of rows
         """
-        # 获取游标
+        # Get cursor
         cursor = conn.cursor()
-        # 执行SQL
+        # Implementation of SQL
         cursor.execute(sql, parameter)
-        # 提交操作
+        # Submit operation
         conn.commit()
-        # 影响行数
+        # Number of rows affected
         rowcount = cursor.rowcount
-        # 最后一次插入ID
+        # Last insert ID
         lastrowid = cursor.lastrowid
-        # 关闭游标
+        # Close cursor
         cursor.close()
         return lastrowid, rowcount

@@ -4,30 +4,30 @@ import re
 
 class Rule:
     """
-    校验规则抽象类
+    Validation rule abstract class
     """
 
     def know(self, expr):
         """
-        识别校验规则
-        :param expr: 规则表达式
-        :return: 布尔
+        Identification verification rules
+        :param expr: Rule expression
+        :return: Boer
         """
         pass
 
     def check(self, dic, expr, name, value):
         """
-        校验表达式和对应值
-        :param dic: 原始字典
-        :param expr: 规则表达式
-        :param name: 参数名
-        :param value: 待校验的值
-        :return: 验证结果
+        Verify expression and corresponding value
+        :param dic: Original dictionary
+        :param expr: Rule expression
+        :param name: Parameter name
+        :param value: Value to be verified
+        :return: Verification results
         """
         pass
 
 
-# 非空校验
+# Non empty calibration
 class Required(Rule):
     def know(self, expr):
         return "required" == expr
@@ -35,14 +35,14 @@ class Required(Rule):
     def check(self, dic, expr, name, value):
         b = isinstance(value, str)
         if not b:
-            return b, name + "类型错误"
+            return b, name + " error in type"
         b = (value != "")
         if not b:
-            return b, name + "字段不能为空"
+            return b, name + " Field cannot be empty"
         return b, "success"
 
 
-# 字符串长度校验
+# String length verification
 class Length(Rule):
     expr = "length"
 
@@ -52,17 +52,17 @@ class Length(Rule):
     def check(self, dic, expr, name, value):
         b = isinstance(value, str)
         if not b:
-            return b, name + "类型错误"
+            return b, name + " error in type"
         l = len(value)
         minmax = expr[len(self.expr) + 1:len(expr) - 1].split("-")
         min = int(minmax[0])
         max = int(minmax[1])
         if l < min or l > max:
-            return False, name + "字段长度非法"
+            return False, name + " Illegal field length"
         return True, "success"
 
 
-# 数字范围校验
+# Digital range verification
 class Range(Rule):
     expr = "range"
 
@@ -75,16 +75,16 @@ class Range(Rule):
             dic[name] = value
         except Exception as e:
             print(e)
-            return False, name + "类型错误"
+            return False, name + " error in type"
         minmax = expr[len(self.expr) + 1:len(expr) - 1].split("-")
         min = int(minmax[0])
         max = int(minmax[1])
         if value < min or value > max:
-            return False, name + "字段范围非法"
+            return False, name + " Illegal field range"
         return True, "success"
 
 
-# 时间校验
+# Time check
 class DateTime(Rule):
     expr = "datetime"
 
@@ -98,11 +98,11 @@ class DateTime(Rule):
             dic[name] = value
         except Exception as e:
             print(e)
-            return False, name + "类型错误"
+            return False, name + " error in type"
         return True, "success"
 
 
-# 正则匹配校验
+# Regular match check
 class Regexp(Rule):
     expr = "regexp"
 
@@ -113,8 +113,8 @@ class Regexp(Rule):
         pattern = expr[len(self.expr) + 1:len(expr) - 1]
         search = re.search(pattern, value)
         if search is None:
-            return False, name + "字段格式非法"
+            return False, name + " Illegal field format"
         start_end = search.span()
         if (start_end[1] - start_end[0]) != len(value):
-            return False, name + "字段格式非法"
+            return False, name + " Illegal field format"
         return True, "success"

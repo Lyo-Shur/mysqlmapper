@@ -5,35 +5,35 @@ from mysqlmapper.mysql.generate.mapper import get_mapper_xml
 
 
 class Manager:
-    # 数据库连接
+    # Database connection
     conn = None
-    # xml配置文件属性
+    # XML profile properties
     xml_config = None
 
     def __init__(self, conn, xml_config):
         """
-        初始化Manager
-        :param conn: 数据库连接
-        :param xml_config: XML配置文件信息
+        Initialize Manager
+        :param conn: Database connection
+        :param xml_config: XML profile information
         """
         self.conn = conn
         self.xml_config = xml_config
 
     def query(self, key, parameter):
         """
-        查询结果集
-        :param key: SQL别名
-        :param parameter: 执行参数
-        :return: 执行结果
+        Query result set
+        :param key: SQL alias
+        :param parameter: Execution parameter
+        :return: results of enforcement
         """
-        # 获取SQL
+        # Get SQL
         sql = self.xml_config["sqls"][key]
-        # 渲染模板
+        # Render template
         result, parameters = sql_builder(sql, parameter)
-        print("当前执行的SQL>>>", result, parameters)
-        # 执行SQL
+        print("Currently executing SQL>>>", result, parameters)
+        # Implementation of SQL
         query_list = Engine.query(self.conn, result, parameters)
-        # 翻译别名
+        # Translation alias
         list = []
         for query_item in query_list:
             item = {}
@@ -47,67 +47,67 @@ class Manager:
 
     def count(self, key, parameter):
         """
-        查询数量
-        :param key: SQL别名
-        :param parameter: 执行参数
-        :return: 执行结果
+        Query quantity
+        :param key: SQL alias
+        :param parameter: Execution parameter
+        :return: results of enforcement
         """
-        # 获取SQL
+        # Get SQL
         sql = self.xml_config["sqls"][key]
-        # 渲染模板
+        # Render template
         result, parameters = sql_builder(sql, parameter)
-        print("当前执行的SQL>>>", result, parameters)
-        # 执行SQL
+        print("Currently executing SQL>>>", result, parameters)
+        # Implementation of SQL
         return Engine.count(self.conn, result, parameters)
 
     def exec(self, key, parameter):
         """
-        执行SQL
-        :param key: SQL别名
-        :param parameter: 执行参数
-        :return: 执行结果
+        Implementation of SQL
+        :param key: SQL alias
+        :param parameter: Execution parameter
+        :return: results of enforcement
         """
-        # 获取SQL
+        # Get SQL
         sql = self.xml_config["sqls"][key]
-        # 渲染模板
+        # Render template
         result, parameters = sql_builder(sql, parameter)
-        print("当前执行的SQL>>>", result, parameters)
-        # 执行SQL
+        print("Currently executing SQL>>>", result, parameters)
+        # Implementation of SQL
         return Engine.exec(self.conn, result, parameters)
 
 
 def get_manager_by_string(conn, xml_string):
     """
-    使用字符串获取Manager
-    :param conn: 数据库连接
-    :param xml_string: xml字符串
+    Get manager using string
+    :param conn: Database connection
+    :param xml_string: xml Character string
     :return: Manager
     """
-    # 获取config
+    # Get config
     config = parse_config_from_string(xml_string)
     return Manager(conn, config)
 
 
 def get_manager_by_file(conn, xml_path):
     """
-    使用XML文件获取Manager
-    :param conn: 数据库连接
-    :param xml_path: xml文件路径
+    Get manager using XML file
+    :param conn: Database connection
+    :param xml_path: XML file path
     :return: Manager
     """
-    # 获取config
+    # Get config
     config = parse_config_from_file(xml_path)
     return Manager(conn, config)
 
 
 def get_manager_by_dbinfo(conn, database_info, table_name):
     """
-    使用数据库信息获取Manager
-    :param conn: 数据库连接
-    :param database_info: 数据库信息
-    :param table_name: 表名
+    Get manager with database information
+    :param conn: Database connection
+    :param database_info: database information
+    :param table_name: Table name
     :return: Manager
     """
-    # 获取xml
+    # Get XML
     xml_string = get_mapper_xml(database_info, table_name)
     return get_manager_by_string(conn, xml_string)

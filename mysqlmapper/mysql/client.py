@@ -3,20 +3,20 @@ import pymysql
 
 class ConnHolder:
     """
-    数据库连接持有者
+    Database connection holder
     """
 
-    # 数据库连接
+    # Database connection
     _conn = None
 
     def __init__(self, host, user, password, database, charset="utf8"):
         """
-        初始化数据库连接
-        :param host: 主机名
-        :param user: 用户名
-        :param password: 密码
-        :param database: 数据库名
-        :param charset: 编码格式
+        Initialize database connection
+        :param host: host
+        :param user: user
+        :param password: password
+        :param database: database
+        :param charset: charset
         :return:
         """
         self._conn = pymysql.connect(
@@ -27,7 +27,7 @@ class ConnHolder:
 
     def get_conn(self):
         """
-        获取数据库连接
-        :return: 数据库连接
+        Get database connection
+        :return: Database connection
         """
         return self._conn

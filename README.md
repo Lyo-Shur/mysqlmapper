@@ -1,2 +1,2 @@
 # mysqlmapper
-python用的mysql查询工具类。
+MySQL query tool class used by python.

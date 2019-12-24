@@ -3,21 +3,21 @@ from mysqlmapper.verification.rule import *
 
 class Helper:
     """
-    格式校验帮助类
+    Format verification help class
     """
 
-    # 参数字典
+    # Parameter dictionary
     _dict_parameter = None
-    # 校验配置
+    # Check configuration
     _configs = None
-    # 内置校验规则
+    # Built in verification rules
     _rules = []
 
     def __init__(self, dict_parameter, configs):
         """
-        初始化校验帮助工具类
-        :param dict_parameter: 参数字典
-        :param configs: 规则字典
+        Initialize verification help tool class
+        :param dict_parameter: Parameter dictionary
+        :param configs: Rule dictionary
         """
         self._dict_parameter = dict_parameter
         self._configs = configs
@@ -29,15 +29,15 @@ class Helper:
 
     def weak_check(self):
         """
-        弱校验，当参数不存在时，略过
-        :return: 校验结果
+        Weak check, skip when parameter does not exist
+        :return: Verification result
         """
         for config in self._configs.items():
             name = config[0]
             expr = config[1]
             if name not in self._dict_parameter:
                 continue
-            # 规则匹配标志位
+            # Rule matching flag bit
             flag = False
             for rule in self._rules:
                 if rule.know(expr):
@@ -46,20 +46,20 @@ class Helper:
                     if not b:
                         return b, message
             if not flag:
-                return False, "校验规则不存在"
+                return False, "Validation rule does not exist"
         return True, "success"
 
     def check(self):
         """
-        强校验，当参数不存在时，返回校验错误
-        :return: 校验结果
+        Strong check. When the parameter does not exist, a check error is returned
+        :return: Verification result
         """
         for config in self._configs.items():
             name = config[0]
             expr = config[1]
             if name not in self._dict_parameter:
-                return False, name + "参数不存在"
-            # 规则匹配标志位
+                return False, name + " Parameter does not exist"
+            # Rule matching flag bit
             flag = False
             for rule in self._rules:
                 if rule.know(expr):
@@ -70,5 +70,5 @@ class Helper:
                     break
 
             if not flag:
-                return False, "校验规则不存在"
+                return False, "Validation rule does not exist"
         return True, "success"

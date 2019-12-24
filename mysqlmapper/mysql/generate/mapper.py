@@ -135,41 +135,41 @@ _mapper_xml = """
 
 def get_mapper_xml(database_info, table_name):
     """
-    使用数据库描述信息构建XML
-    :param database_info: 数据库描述信息
-    :param table_name: 表明
-    :return: xml文档
+    Building XML with database description information
+    :param database_info: Database description information
+    :param table_name: Table name
+    :return: XML document
     """
 
-    # 模板环境
+    # Template environment
     env = Environment()
 
-    # 自定义filter
+    # Custom filter
     def echo(value):
         """
-        打印一个字符，用于二次渲染
-        :param value: 待打印的字符
-        :return: 原封输出
+        Print a character for secondary rendering
+        :param value: Characters to be printed
+        :return: Original output
         """
         return value
 
     def clear_type(value):
         """
-        数据库类型清理
-        :param value:  数据库类型
-        :return: 清理结果
+        Database type cleanup
+        :param value:  Database type
+        :return: Cleaning results
         """
         return value.split("(")[0]
 
-    # 装载filter
+    # Loading filter
     env.filters['echo'] = echo
     env.filters['clear_type'] = clear_type
 
-    # 加载模板
+    # Loading template
     template = env.from_string(_mapper_xml)
-    # 组装渲染参数
+    # Assemble render parameters
     data = {"data_base_name": database_info["Name"]}
-    # 查找表信息
+    # Lookup table information
     table = None
     for item in database_info["tables"]:
         if item["Name"] == table_name:
@@ -178,7 +178,7 @@ def get_mapper_xml(database_info, table_name):
     if table is None:
         return ""
     data["table"] = table
-    # 查找主键信息
+    # Find primary key information
     key = ""
     for item in table["indexs"]:
         if item["Name"] == "PRIMARY":
