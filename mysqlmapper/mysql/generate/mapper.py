@@ -103,7 +103,7 @@ _mapper_xml = """
             INSERT INTO {{table.Name}}
             (
         {% for column in table.columns %}
-            {% if column.Name != key and table.AutoIncrement != -1 %}
+            {% if column.Name != key or table.AutoIncrement == -1 %}
                 {{ column.Name }}{% if not loop.last %}, {% endif %}
             {% endif %}
         {% endfor %}
@@ -111,7 +111,7 @@ _mapper_xml = """
             VALUES
             (
     {% for column in table.columns %}
-        {% if column.Name != key and table.AutoIncrement != -1 %}
+        {% if column.Name != key or table.AutoIncrement == -1 %}
             {% if column.Type|clear_type == "datetime" %}
                 #{ {{column.Name}}.strftime("%Y-%m-%d %H:%M:%S") }
             {% else %}
