@@ -13,7 +13,7 @@ _mapper_xml = """
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
@@ -45,7 +45,7 @@ _mapper_xml = """
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
