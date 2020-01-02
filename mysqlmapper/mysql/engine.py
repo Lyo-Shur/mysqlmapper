@@ -1,3 +1,6 @@
+from threading import Lock
+
+_lock = Lock()
 
 
 class Engine:
@@ -13,6 +16,9 @@ class Engine:
         :param parameter: parameter
         :return: Query results
         """
+        _lock.acquire()
+        # ping check
+        conn.ping(reconnect=True)
         # Get cursor
         cursor = conn.cursor()
         # Implementation of SQL
@@ -31,6 +37,7 @@ class Engine:
                 result[names[j]] = i[j]
             results.append(result)
         cursor.close()
+        _lock.release()
         return results
 
     @staticmethod
@@ -57,6 +64,9 @@ class Engine:
         :param parameter: parameter
         :return: Last inserted ID, affecting number of rows
         """
+        _lock.acquire()
+        # ping check
+        conn.ping(reconnect=True)
         # Get cursor
         cursor = conn.cursor()
         # Implementation of SQL
@@ -69,4 +79,5 @@ class Engine:
         lastrowid = cursor.lastrowid
         # Close cursor
         cursor.close()
+        _lock.release()
         return lastrowid, rowcount
