@@ -45,6 +45,7 @@ class Helper:
                     b, message = rule.check(self._dict_parameter, expr, name, self._dict_parameter[name])
                     if not b:
                         return b, message
+                    break
             if not flag:
                 return False, "Validation rule does not exist"
         return True, "success"
