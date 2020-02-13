@@ -11,7 +11,7 @@ class Helper:
     # Check configuration
     _configs = None
     # Built in verification rules
-    _rules = []
+    _rules = [Required(), Length(), Range(), DateTime(), Regexp()]
 
     def __init__(self, dict_parameter, configs):
         """
@@ -21,11 +21,6 @@ class Helper:
         """
         self._dict_parameter = dict_parameter
         self._configs = configs
-        self._rules.append(Required())
-        self._rules.append(Length())
-        self._rules.append(Range())
-        self._rules.append(DateTime())
-        self._rules.append(Regexp())
 
     def weak_check(self):
         """
