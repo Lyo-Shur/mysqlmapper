@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
     setup(
         name="mysqlmapper",
-        version="0.0.7",
+        version="0.0.8",
         description=(
             "MySQL query tool class used by python."
         ),

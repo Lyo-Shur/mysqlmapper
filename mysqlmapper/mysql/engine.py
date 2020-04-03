@@ -21,8 +21,15 @@ class Engine:
         conn.ping(reconnect=True)
         # Get cursor
         cursor = conn.cursor()
-        # Implementation of SQL
-        cursor.execute(sql, parameter)
+
+        exception = None
+        try:
+            # Implementation of SQL
+            cursor.execute(sql, parameter)
+        except Exception as e:
+            print(e)
+            exception = e
+
         # Submit operation
         conn.commit()
         # Get table header
@@ -38,6 +45,10 @@ class Engine:
             results.append(result)
         cursor.close()
         _lock.release()
+
+        # Delay throw exception
+        if exception is not None:
+            raise exception
         return results
 
     @staticmethod
@@ -69,8 +80,15 @@ class Engine:
         conn.ping(reconnect=True)
         # Get cursor
         cursor = conn.cursor()
-        # Implementation of SQL
-        cursor.execute(sql, parameter)
+
+        exception = None
+        try:
+            # Implementation of SQL
+            cursor.execute(sql, parameter)
+        except Exception as e:
+            print(e)
+            exception = e
+
         # Submit operation
         conn.commit()
         # Number of rows affected
@@ -80,4 +98,8 @@ class Engine:
         # Close cursor
         cursor.close()
         _lock.release()
+
+        # Delay throw exception
+        if exception is not None:
+            raise exception
         return lastrowid, rowcount
