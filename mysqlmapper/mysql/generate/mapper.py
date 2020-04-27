@@ -15,6 +15,15 @@ _mapper_xml = """
             {% if column.Type|clear_type == "varchar" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
+            {% if column.Type|clear_type == "text" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "longtext" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "mediumtext" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
             {% if column.Type|clear_type == "int" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
                 {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
@@ -45,6 +54,15 @@ _mapper_xml = """
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "text" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "longtext" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "mediumtext" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
@@ -80,6 +98,15 @@ _mapper_xml = """
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "text" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "longtext" %}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+            {% endif %}
+            {% if column.Type|clear_type == "mediumtext" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
