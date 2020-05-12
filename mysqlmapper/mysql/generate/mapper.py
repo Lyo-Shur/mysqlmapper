@@ -6,32 +6,32 @@ _mapper_xml = """
         <key>GetList</key>
         <value>
             SELECT
-                {% for column in table.columns %}{{ column.Name }}{% if not loop.last %}, {% endif %}{% endfor %}
+                {% for column in table.columns %}`{{ column.Name }}`{% if not loop.last %}, {% endif %}{% endfor %}
             FROM
                 {{table.Name}}
             WHERE
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "text" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "longtext" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "mediumtext" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
-                {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
                 {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "datetime" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
-                {{ column.Name }} = #{ {{ column.Name }}.strftime("%Y-%m-%d %H:%M:%S") } AND
+                `{{ column.Name }}` = #{ {{ column.Name }}.strftime("%Y-%m-%d %H:%M:%S") } AND
                 {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
         {% endif %}
@@ -54,25 +54,25 @@ _mapper_xml = """
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "text" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "longtext" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "mediumtext" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` LIKE #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
-                {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} } AND {{ "{"|echo }}% endif %{{ "}"|echo }}
                 {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "datetime" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
-                {{ column.Name }} = #{ {{ column.Name }}.strftime("%Y-%m-%d %H:%M:%S") } AND
+                `{{ column.Name }}` = #{ {{ column.Name }}.strftime("%Y-%m-%d %H:%M:%S") } AND
                 {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
         {% endif %}
@@ -84,7 +84,7 @@ _mapper_xml = """
         <key>GetModel</key>
         <value>
             SELECT
-                {% for column in table.columns %}{{ column.Name }}{% if not loop.last %}, {% endif %}{% endfor %}
+                {% for column in table.columns %}`{{ column.Name }}`{% if not loop.last %}, {% endif %}{% endfor %}
             FROM
                 {{table.Name}}
             WHERE
@@ -98,25 +98,25 @@ _mapper_xml = """
     {% for column in table.columns %}
         {% if column.Name != key %}
             {% if column.Type|clear_type == "varchar" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "text" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "longtext" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "mediumtext" %}
-                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "int" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
-                {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} {{ column.Name }} = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
+                {{ "{"|echo }}% if {{ column.Name }} != 0 %{{ "}"|echo }} `{{ column.Name }}` = #{ {{ column.Name }} }, {{ "{"|echo }}% endif %{{ "}"|echo }}
                 {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
             {% if column.Type|clear_type == "datetime" %}
                 {{ "{"|echo }}% if {{ column.Name }} %{{ "}"|echo }}
-                {{ column.Name }} = #{ {{ column.Name }}.strftime("%Y-%m-%d %H:%M:%S") },
+                `{{ column.Name }}` = #{ {{ column.Name }}.strftime("%Y-%m-%d %H:%M:%S") },
                 {{ "{"|echo }}% endif %{{ "}"|echo }}
             {% endif %}
         {% endif %}
@@ -131,7 +131,7 @@ _mapper_xml = """
             (
         {% for column in table.columns %}
             {% if column.Name != key or table.AutoIncrement == -1 %}
-                {{ column.Name }}{% if not loop.last %}, {% endif %}
+                `{{ column.Name }}`{% if not loop.last %}, {% endif %}
             {% endif %}
         {% endfor %}
             )
