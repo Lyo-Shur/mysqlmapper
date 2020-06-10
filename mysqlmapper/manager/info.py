@@ -1,3 +1,8 @@
+from mysqlmapper.logger import Logger
+from mysqlmapper.manager.xml_config import parse_config_from_string
+from mysqlmapper.manager.manager import Manager
+
+
 table_xml = """
 <xml>
     <mapper column="TABLE_NAME" parameter="Name"/>
@@ -89,3 +94,34 @@ key_xml = """
     </sql>
 </xml>
 """
+
+
+def get_db_info(conn, database_name, logger=Logger()):
+    """
+    Get database information
+    :param conn: Database connection
+    :param database_name: Database name
+    :param logger: Logger
+    :return: database information
+    """
+    # Read profile
+    table_config = parse_config_from_string(table_xml)
+    column_config = parse_config_from_string(column_xml)
+    index_config = parse_config_from_string(index_xml)
+    key_config = parse_config_from_string(key_xml)
+
+    # Query table structure information
+    tables = Manager(conn, table_config) \
+        .set_logger(logger) \
+        .query("GetList", {"data_base_name": database_name})
+    for table in tables:
+        table["columns"] = Manager(conn, column_config) \
+            .set_logger(logger) \
+            .query("GetList", {"data_base_name": database_name, "table_name": table["Name"]})
+        table["indexs"] = Manager(conn, index_config) \
+            .set_logger(logger) \
+            .query("GetList", {"data_base_name": database_name, "table_name": table["Name"]})
+        table["keys"] = Manager(conn, key_config) \
+            .set_logger(logger) \
+            .query("GetList", {"data_base_name": database_name, "table_name": table["Name"]})
+    return {"Name": database_name, "tables": tables}

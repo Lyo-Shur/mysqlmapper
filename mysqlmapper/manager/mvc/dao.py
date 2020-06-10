@@ -1,7 +1,11 @@
-from mysqlmapper.mysql.manager import get_manager_by_dbinfo
+from mysqlmapper.manager.manager import Manager
 
 
 class DAO:
+    """
+    Dao layer
+    """
+
     # Database manager
     _manager = None
 
@@ -13,14 +17,22 @@ class DAO:
     _insert = "Insert"
     _delete = "Delete"
 
-    def __init__(self, conn, database_info, table_name):
+    def __init__(self, conn, config):
         """
         Initialize Dao layer
         :param conn: Database connection
-        :param database_info: database information
-        :param table_name: Table name
+        :param config: xml config
         """
-        self._manager = get_manager_by_dbinfo(conn, database_info, table_name)
+        self._manager = Manager(conn, config)
+
+    def set_logger(self, logger):
+        """
+        Set Logger
+        :param logger: log printing
+        :return self
+        """
+        self._manager.set_logger(logger)
+        return self
 
     def get_list(self, parameter):
         """
@@ -64,8 +76,8 @@ class DAO:
         :param parameter: insert data
         :return: Insert results
         """
-        id, _ = self._manager.exec(self._insert, parameter)
-        return id
+        number, _ = self._manager.exec(self._insert, parameter)
+        return number
 
     def delete(self, parameter):
         """

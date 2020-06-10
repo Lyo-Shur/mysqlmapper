@@ -17,7 +17,6 @@ class ConnHolder:
         :param password: password
         :param database: database
         :param charset: charset
-        :return:
         """
         self._conn = pymysql.connect(
             host=host,

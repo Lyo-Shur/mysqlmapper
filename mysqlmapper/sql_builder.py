@@ -2,7 +2,7 @@ from jinja2 import Template
 import re
 
 
-def sql_builder(template, parameter):
+def builder(template, parameter):
     """
     Build SQL string
     :param template: Init jinja2 template

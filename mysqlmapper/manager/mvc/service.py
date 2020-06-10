@@ -1,4 +1,3 @@
-from mysqlmapper.mysql.mvc.dao import DAO
 
 
 class Service:
@@ -7,14 +6,21 @@ class Service:
     """
     _dao = None
 
-    def __init__(self, conn, database_info, table_name):
+    def __init__(self, dao):
         """
         Initialize service layer
-        :param conn: Database connection
-        :param database_info: database information
-        :param table_name: Table name
+        :param dao: Dao layer
         """
-        self._dao = DAO(conn, database_info, table_name)
+        self._dao = dao
+
+    def set_logger(self, logger):
+        """
+        Set Logger
+        :param logger: log printing
+        :return self
+        """
+        self._dao.set_logger(logger)
+        return self
 
     def get_list(self, parameter):
         """
