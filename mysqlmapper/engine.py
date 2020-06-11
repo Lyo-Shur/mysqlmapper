@@ -1,38 +1,30 @@
 from threading import Lock
 
-from mysqlmapper.logger import DefaultLogger
-from mysqlmapper.sql_builder import builder
+import pymysql
+from tabledbmapper.engine import Engine
 
 _lock = Lock()
 
 
-class Engine:
+class MysqlEngine(Engine):
     """
-    SQL Execution Engine
+    MYSQL Execution Engine
     """
-
-    # Database connection
-    _conn = None
-
-    # Logger
-    _logger = None
-
-    def __init__(self, conn):
+    def __init__(self, host, user, password, database, charset="utf8"):
         """
         Init SQL Execution Engine
-        :param conn: Database connection
+        :param host: host
+        :param user: user
+        :param password: password
+        :param database: database
+        :param charset: charset
         """
-        self._conn = conn
-        self._logger = DefaultLogger()
-
-    def set_logger(self, logger):
-        """
-        Set Logger
-        :param logger: log printing
-        :return self
-        """
-        self._logger = logger
-        return self
+        super().__init__(host, user, password, database, charset)
+        self._conn = pymysql.connect(
+            host=host,
+            user=user, password=password,
+            database=database,
+            charset=charset)
 
     def query(self, sql, parameter):
         """
@@ -128,59 +120,3 @@ class Engine:
         if exception is not None:
             raise exception
         return lastrowid, rowcount
-
-
-class TemplateEngine:
-    """
-    SQL template execution engine
-    Using the jinja2 template engine
-    """
-
-    # SQL Execution Engine
-    _engine = None
-
-    def __init__(self, conn):
-        """
-        Init SQL Execution Engine
-        :param conn: Database connection
-        """
-        self._engine = Engine(conn)
-
-    def set_logger(self, logger):
-        """
-        Set Logger
-        :param logger: log printing
-        :return self
-        """
-        self._engine.set_logger(logger)
-        return self
-
-    def query(self, sql_template, parameter):
-        """
-        Query list information
-        :param sql_template: SQL template to be executed
-        :param parameter: parameter
-        :return: Query results
-        """
-        sql, param = builder(sql_template, parameter)
-        return self._engine.query(sql, param)
-
-    def count(self, sql_template, parameter):
-        """
-        Query quantity information
-        :param sql_template: SQL template to be executed
-        :param parameter: parameter
-        :return: Query results
-        """
-        sql, param = builder(sql_template, parameter)
-        return self._engine.count(sql, param)
-
-    def exec(self, sql_template, parameter):
-        """
-        Execute SQL statement
-        :param sql_template: SQL template to be executed
-        :param parameter: parameter
-        :return: Last inserted ID, affecting number of rows
-        """
-        sql, param = builder(sql_template, parameter)
-        return self._engine.exec(sql, param)

@@ -1,9 +1,12 @@
-from mysqlmapper.client import ConnHolder
+from tabledbmapper.engine import TemplateEngine
+from tabledbmapper.manager.manager import Manager
+from tabledbmapper.manager.mvc.dao import DAO
+from tabledbmapper.manager.mvc.service import Service
+from tabledbmapper.manager.xml_config import parse_config_from_string
+
+from mysqlmapper.engine import MysqlEngine
 from mysqlmapper.manager.info import get_db_info
-from mysqlmapper.manager.mvc.dao import DAO
 from mysqlmapper.manager.mvc.mapper import get_mapper_xml
-from mysqlmapper.manager.mvc.service import Service
-from mysqlmapper.manager.xml_config import parse_config_from_string
 
 
 class MVCHolder:
@@ -12,7 +15,7 @@ class MVCHolder:
     """
 
     # Database connection
-    conn_holder = None
+    template_engine = None
     # Database description information
     database_info = None
     # Service dictionary
@@ -27,16 +30,19 @@ class MVCHolder:
         :param database: Database name
         :param charset: Encoding format
         """
-        self.conn_holder = ConnHolder(host, user, password, database, charset)
-        self.database_info = get_db_info(self.conn_holder.get_conn(), database)
+        engine = MysqlEngine(host, user, password, database, charset)
+        self.template_engine = TemplateEngine(engine)
+        self.database_info = get_db_info(self.template_engine, database)
         self.services = {}
         for table in self.database_info["tables"]:
             # get mapper xml
             xml_string = get_mapper_xml(self.database_info, table["Name"])
             # parse to config
             config = parse_config_from_string(xml_string)
+            # get manager
+            manager = Manager(self.template_engine, config)
             # get dao
-            dao = DAO(self.conn_holder.get_conn(), config)
+            dao = DAO(manager)
             # get service
             self.services[table["Name"]] = Service(dao)
 

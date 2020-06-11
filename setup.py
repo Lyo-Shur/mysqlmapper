@@ -1,10 +1,9 @@
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
-    long_description = fh.read()
     setup(
         name="mysqlmapper",
-        version="1.0.0",
+        version="1.1.0",
         description=(
             "MySQL query tool class used by python."
         ),
@@ -34,8 +33,9 @@ with open("README.md", "r") as fh:
             'Topic :: Software Development :: Libraries'
         ],
         install_requires=[
+            'tabledbmapper',
             'PyMySQL',
-            'Jinja2',
         ],
         zip_safe=False
     )
+    long_description = fh.read()
