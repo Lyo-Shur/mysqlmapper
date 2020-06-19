@@ -1,4 +1,5 @@
 from tabledbmapper.engine import TemplateEngine
+from tabledbmapper.logger import DefaultLogger
 from tabledbmapper.manager.manager import Manager
 from tabledbmapper.manager.mvc.dao import DAO
 from tabledbmapper.manager.mvc.service import Service
@@ -45,6 +46,7 @@ class MVCHolder:
             dao = DAO(manager)
             # get service
             self.services[table["Name"]] = Service(dao)
+        self.template_engine.set_logger(DefaultLogger())
 
     def set_logger(self, logger):
         """
