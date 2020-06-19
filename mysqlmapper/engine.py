@@ -19,7 +19,7 @@ class MysqlEngine(Engine):
         :param database: database
         :param charset: charset
         """
-        Engine.__init__(host, user, password, database, charset)
+        super().__init__(host, user, password, database, charset)
         self._conn = pymysql.connect(
             host=host,
             user=user, password=password,
