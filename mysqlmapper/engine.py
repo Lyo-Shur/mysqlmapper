@@ -19,7 +19,7 @@ class MysqlEngine(Engine):
         :param database: database
         :param charset: charset
         """
-        super().__init__(host, user, password, database, charset)
+        Engine.__init__(host, user, password, database, charset)
         self._conn = pymysql.connect(
             host=host,
             user=user, password=password,
@@ -47,7 +47,12 @@ class MysqlEngine(Engine):
             cursor.execute(sql, parameter)
         except Exception as e:
             self._logger.print_error(e)
-            exception = e
+            # Submit operation
+            self._conn.commit()
+            # Close cursor
+            cursor.close()
+            _lock.release()
+            raise exception
 
         # Submit operation
         self._conn.commit()
@@ -64,10 +69,6 @@ class MysqlEngine(Engine):
             results.append(result)
         cursor.close()
         _lock.release()
-
-        # Delay throw exception
-        if exception is not None:
-            raise exception
         return results
 
     def count(self, sql, parameter):
@@ -104,7 +105,12 @@ class MysqlEngine(Engine):
             cursor.execute(sql, parameter)
         except Exception as e:
             self._logger.print_error(e)
-            exception = e
+            # Submit operation
+            self._conn.commit()
+            # Close cursor
+            cursor.close()
+            _lock.release()
+            raise exception
 
         # Submit operation
         self._conn.commit()
@@ -115,8 +121,4 @@ class MysqlEngine(Engine):
         # Close cursor
         cursor.close()
         _lock.release()
-
-        # Delay throw exception
-        if exception is not None:
-            raise exception
         return lastrowid, rowcount
