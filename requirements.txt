@@ -3,3 +3,6 @@ tabledbmapper==0.0.1
 
 # mysql conn
 PyMySQL==0.9.3
+
+# twine
+twine
