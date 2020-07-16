@@ -1,5 +1,7 @@
 from jinja2 import Environment
 
+from mysqlmapper.manager.mvc.info import DataBaseInfo
+
 _mapper_xml = """
 <xml>
     <sql>
@@ -160,7 +162,7 @@ _mapper_xml = """
 """
 
 
-def get_mapper_xml(database_info, table_name):
+def get_mapper_xml(database_info: DataBaseInfo, table_name: str) -> str:
     """
     Building XML with database description information
     :param database_info: Database description information

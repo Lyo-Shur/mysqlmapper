@@ -1,124 +1,132 @@
-from threading import Lock
-
 import pymysql
-from tabledbmapper.engine import Engine
+from tabledbmapper.engine import ExecuteEngine, ConnHandle, QueryResult, CountResult, ExecResult
+from tabledbmapper.logger import Logger
 
-_lock = Lock()
 
+class MysqlConnHandle(ConnHandle):
 
-class MysqlEngine(Engine):
-    """
-    MYSQL Execution Engine
-    """
-    def __init__(self, host, user, password, database, charset="utf8"):
+    host = None
+    user = None
+    password = None
+    database = None
+    charset = None
+
+    def __init__(self, host: str, user: str, password: str, database: str, charset="utf8"):
         """
-        Init SQL Execution Engine
+        Init Mysql Conn Handle
         :param host: host
         :param user: user
         :param password: password
         :param database: database
         :param charset: charset
         """
-        super().__init__(host, user, password, database, charset)
-        self._conn = pymysql.connect(
-            host=host,
-            user=user, password=password,
-            database=database,
-            charset=charset)
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = database
+        self.charset = charset
 
-    def query(self, sql, parameter):
+    def connect(self) -> pymysql.Connection:
+        """
+        Gets the database connection method
+        """
+        return pymysql.connect(
+            host=self.host,
+            user=self.user, password=self.password,
+            database=self.database,
+            charset=self.charset)
+
+    def ping(self, conn: pymysql.Connection):
+        """
+        Test whether the connection is available, and reconnect
+        :param conn: database conn
+        """
+        conn.ping(reconnect=True)
+
+    def commit(self, conn: pymysql.Connection):
+        """
+        Commit the connection
+        :param conn: database conn
+        """
+        conn.commit()
+
+    def rollback(self, conn: pymysql.Connection):
+        """
+        Rollback the connection
+        :param conn: database conn
+        """
+        conn.rollback()
+
+
+class MysqlExecuteEngine(ExecuteEngine):
+    """
+    MYSQL Execution Engine
+    """
+    def query(self, conn: pymysql.Connection, logger: Logger, sql: str, parameter: list) -> QueryResult:
         """
         Query list information
+        :param conn database conn
+        :param logger logger
         :param sql: SQL statement to be executed
         :param parameter: parameter
         :return: Query results
         """
-        _lock.acquire()
-        # ping check
-        self._conn.ping(reconnect=True)
-        # Get cursor
-        cursor = self._conn.cursor()
+        cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
 
         exception = None
         try:
-            # logger
-            self._logger.print_info(sql, parameter)
-            # Implementation of SQL
+            logger.print_info(sql, parameter)
             cursor.execute(sql, parameter)
         except Exception as e:
-            self._logger.print_error(e)
-            # Submit operation
-            self._conn.commit()
-            # Close cursor
+            logger.print_error(e)
             cursor.close()
-            _lock.release()
             raise exception
 
-        # Submit operation
-        self._conn.commit()
-        # Get table header
-        names = []
-        for i in cursor.description:
-            names.append(i[0])
-        # Get result set
-        results = []
-        for i in cursor.fetchall():
-            result = {}
-            for j in range(len(i)):
-                result[names[j]] = i[j]
-            results.append(result)
+        # get result
+        result = cursor.fetchall()
+        # Close cursor
         cursor.close()
-        _lock.release()
-        return results
+        return result
 
-    def count(self, sql, parameter):
+    def count(self, conn: pymysql.Connection, logger: Logger, sql: str, parameter: list) -> CountResult:
         """
         Query quantity information
+        :param conn database conn
+        :param logger logger
         :param sql: SQL statement to be executed
         :param parameter: parameter
         :return: Query results
         """
-        result = self.query(sql, parameter)
+        result = self.query(conn, logger, sql, parameter)
         if len(result) == 0:
             return 0
         for value in result[0].values():
             return value
 
-    def exec(self, sql, parameter):
+    def exec(self, conn: pymysql.Connection, logger: Logger, sql: str, parameter: list) -> ExecResult:
         """
         Execute SQL statement
+        :param conn database conn
+        :param logger logger
         :param sql: SQL statement to be executed
         :param parameter: parameter
         :return: Last inserted ID, affecting number of rows
         """
-        _lock.acquire()
-        # ping check
-        self._conn.ping(reconnect=True)
-        # Get cursor
-        cursor = self._conn.cursor()
+        cursor = conn.cursor()
 
         exception = None
         try:
-            # logger
-            self._logger.print_info(sql, parameter)
-            # Implementation of SQL
+            logger.print_info(sql, parameter)
             cursor.execute(sql, parameter)
         except Exception as e:
-            self._logger.print_error(e)
-            # Submit operation
-            self._conn.commit()
-            # Close cursor
+            logger.print_error(e)
             cursor.close()
-            _lock.release()
             raise exception
 
-        # Submit operation
-        self._conn.commit()
         # Number of rows affected
         rowcount = cursor.rowcount
         # Last insert ID
         lastrowid = cursor.lastrowid
         # Close cursor
         cursor.close()
-        _lock.release()
         return lastrowid, rowcount

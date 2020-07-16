@@ -1,12 +1,12 @@
 from tabledbmapper.engine import TemplateEngine
-from tabledbmapper.logger import DefaultLogger
+from tabledbmapper.logger import DefaultLogger, Logger
 from tabledbmapper.manager.manager import Manager
 from tabledbmapper.manager.mvc.dao import DAO
 from tabledbmapper.manager.mvc.service import Service
 from tabledbmapper.manager.xml_config import parse_config_from_string
 
-from mysqlmapper.engine import MysqlEngine
-from mysqlmapper.manager.info import get_db_info
+from mysqlmapper.engine import MysqlConnHandle, MysqlExecuteEngine
+from mysqlmapper.manager.mvc.info import get_db_info
 from mysqlmapper.manager.mvc.mapper import get_mapper_xml
 
 
@@ -22,7 +22,7 @@ class MVCHolder:
     # Service dictionary
     services = None
 
-    def __init__(self, host, user, password, database, charset="utf8"):
+    def __init__(self, host: str, user: str, password: str, database: str, charset="utf8"):
         """
         Initialize MVC holder
         :param host: host name
@@ -31,8 +31,10 @@ class MVCHolder:
         :param database: Database name
         :param charset: Encoding format
         """
-        engine = MysqlEngine(host, user, password, database, charset)
-        self.template_engine = TemplateEngine(engine)
+        conn_handle = MysqlConnHandle(host, user, password, database, charset)
+        execute_engine = MysqlExecuteEngine()
+        conn = conn_handle.connect()
+        self.template_engine = TemplateEngine(conn_handle, execute_engine, conn)
         self.database_info = get_db_info(self.template_engine, database)
         self.services = {}
         for table in self.database_info["tables"]:
@@ -48,7 +50,7 @@ class MVCHolder:
             self.services[table["Name"]] = Service(dao)
         self.template_engine.set_logger(DefaultLogger())
 
-    def set_logger(self, logger):
+    def set_logger(self, logger: Logger):
         """
         Set Logger
         :param logger: log printing
