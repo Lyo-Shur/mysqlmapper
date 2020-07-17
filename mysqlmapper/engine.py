@@ -1,9 +1,10 @@
 import pymysql
-from tabledbmapper.engine import ExecuteEngine, ConnHandle, QueryResult, CountResult, ExecResult
+from tabledbmapper.engine import ExecuteEngine, ConnHandle, QueryResult, CountResult, ExecResult, ConnBuilder, \
+    TemplateEngine
 from tabledbmapper.logger import Logger
 
 
-class MysqlConnHandle(ConnHandle):
+class MySQLConnBuilder(ConnBuilder):
 
     host = None
     user = None
@@ -13,7 +14,7 @@ class MysqlConnHandle(ConnHandle):
 
     def __init__(self, host: str, user: str, password: str, database: str, charset="utf8"):
         """
-        Init Mysql Conn Handle
+        Init MySQL Conn Handle
         :param host: host
         :param user: user
         :param password: password
@@ -35,6 +36,9 @@ class MysqlConnHandle(ConnHandle):
             user=self.user, password=self.password,
             database=self.database,
             charset=self.charset)
+
+
+class MySQLConnHandle(ConnHandle):
 
     def ping(self, conn: pymysql.Connection):
         """
@@ -58,9 +62,9 @@ class MysqlConnHandle(ConnHandle):
         conn.rollback()
 
 
-class MysqlExecuteEngine(ExecuteEngine):
+class MySQLExecuteEngine(ExecuteEngine):
     """
-    MYSQL Execution Engine
+    MySQL Execution Engine
     """
     def query(self, conn: pymysql.Connection, logger: Logger, sql: str, parameter: list) -> QueryResult:
         """
@@ -130,3 +134,8 @@ class MysqlExecuteEngine(ExecuteEngine):
         # Close cursor
         cursor.close()
         return lastrowid, rowcount
+
+
+class MySQLTemplateEngine(TemplateEngine):
+    def __init__(self, conn: pymysql.Connection):
+        super().__init__(MySQLConnHandle(), MySQLExecuteEngine(), conn)
