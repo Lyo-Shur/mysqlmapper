@@ -112,7 +112,7 @@ def get_db_info(template_engine: TemplateEngine, database_name: str) -> DataBase
     index_config = parse_config_from_string(_index_xml)
     key_config = parse_config_from_string(_key_xml)
 
-    # build manager
+    # builder manager
     table_manager = Manager(template_engine, table_config)
     column_manager = Manager(template_engine, column_config)
     index_manager = Manager(template_engine, index_config)
