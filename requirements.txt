@@ -1,5 +1,5 @@
 # base
-tabledbmapper==0.1.0
+tabledbmapper==0.1.2
 
 # mysql conn
 PyMySQL==0.9.3

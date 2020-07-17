@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     setup(
         name="mysqlmapper",
-        version="2.0.0",
+        version="2.1.0",
         description=(
             "MySQL query tool class used by python."
         ),

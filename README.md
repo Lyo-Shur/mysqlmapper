@@ -9,3 +9,6 @@ MySQL query tool class used by python.
 
 2.0.0
 * Need tabledbmapper 0.1.0
+
+2.1.0
+* Need tabledbmapper 0.1.2

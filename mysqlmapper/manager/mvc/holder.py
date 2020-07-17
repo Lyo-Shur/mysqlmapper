@@ -3,6 +3,7 @@ from tabledbmapper.logger import DefaultLogger, Logger
 from tabledbmapper.manager.manager import Manager
 from tabledbmapper.manager.mvc.dao import DAO
 from tabledbmapper.manager.mvc.service import Service
+from tabledbmapper.manager.session.sql_session import SQLSession
 from tabledbmapper.manager.xml_config import parse_config_from_string
 
 from mysqlmapper.engine import MysqlConnHandle, MysqlExecuteEngine
@@ -15,14 +16,14 @@ class MVCHolder:
     MVC retainer
     """
 
-    # Database connection
-    template_engine = None
+    # Database session
+    session = None
     # Database description information
     database_info = None
     # Service dictionary
     services = None
 
-    def __init__(self, host: str, user: str, password: str, database: str, charset="utf8"):
+    def __init__(self, host: str, user: str, password: str, database: str, enable_simple_service=True, charset="utf8"):
         """
         Initialize MVC holder
         :param host: host name
@@ -34,21 +35,26 @@ class MVCHolder:
         conn_handle = MysqlConnHandle(host, user, password, database, charset)
         execute_engine = MysqlExecuteEngine()
         conn = conn_handle.connect()
-        self.template_engine = TemplateEngine(conn_handle, execute_engine, conn)
-        self.database_info = get_db_info(self.template_engine, database)
-        self.services = {}
-        for table in self.database_info["tables"]:
-            # get mapper xml
-            xml_string = get_mapper_xml(self.database_info, table["Name"])
-            # parse to config
-            config = parse_config_from_string(xml_string)
-            # get manager
-            manager = Manager(self.template_engine, config)
-            # get dao
-            dao = DAO(manager)
-            # get service
-            self.services[table["Name"]] = Service(dao)
-        self.template_engine.set_logger(DefaultLogger())
+        template_engine = TemplateEngine(conn_handle, execute_engine, conn)
+
+        self.session = SQLSession(template_engine)
+
+        if enable_simple_service:
+            self.session.engine().set_logger(Logger())
+            self.database_info = get_db_info(self.session.engine(), database)
+            self.services = {}
+            for table in self.database_info["tables"]:
+                # get mapper xml
+                xml_string = get_mapper_xml(self.database_info, table["Name"])
+                # parse to config
+                config = parse_config_from_string(xml_string)
+                # get manager
+                manager = Manager(self.session.engine(), config)
+                # get dao
+                dao = DAO(manager)
+                # get service
+                self.services[table["Name"]] = Service(dao)
+            self.session.engine().set_logger(DefaultLogger())
 
     def set_logger(self, logger: Logger):
         """

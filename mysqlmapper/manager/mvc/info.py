@@ -1,7 +1,6 @@
 from typing import Dict
 
 from tabledbmapper.engine import TemplateEngine
-from tabledbmapper.logger import Logger
 from tabledbmapper.manager.manager import Manager
 from tabledbmapper.manager.xml_config import parse_config_from_string
 
@@ -100,12 +99,11 @@ _key_xml = """
 DataBaseInfo = Dict
 
 
-def get_db_info(template_engine: TemplateEngine, database_name: str, logger=Logger()) -> DataBaseInfo:
+def get_db_info(template_engine: TemplateEngine, database_name: str) -> DataBaseInfo:
     """
     Get database information
     :param template_engine: SQL template execution engine
     :param database_name: Database name
-    :param logger: Logger
     :return: database information
     """
     # Read profile
@@ -115,10 +113,10 @@ def get_db_info(template_engine: TemplateEngine, database_name: str, logger=Logg
     key_config = parse_config_from_string(_key_xml)
 
     # build manager
-    table_manager = Manager(template_engine, table_config).set_logger(logger)
-    column_manager = Manager(template_engine, column_config).set_logger(logger)
-    index_manager = Manager(template_engine, index_config).set_logger(logger)
-    key_manager = Manager(template_engine, key_config).set_logger(logger)
+    table_manager = Manager(template_engine, table_config)
+    column_manager = Manager(template_engine, column_config)
+    index_manager = Manager(template_engine, index_config)
+    key_manager = Manager(template_engine, key_config)
 
     # Query table structure information
     tables = table_manager.query("GetList", {"data_base_name": database_name})
