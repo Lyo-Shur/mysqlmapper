@@ -64,7 +64,6 @@ class MySQLSessionFactoryBuild(SQLSessionFactoryBuild):
         self._enable_simple_service = False
         return self
 
-    # 这没写完
     def build(self) -> MySQLSessionFactory:
         return MySQLSessionFactory(
             self._conn_builder,
@@ -72,5 +71,6 @@ class MySQLSessionFactoryBuild(SQLSessionFactoryBuild):
             self._execute_engine,
             self._lazy_init,
             self._max_conn_number,
-            self._enable_simple_service
+            self._enable_simple_service,
+            self._logger
         )

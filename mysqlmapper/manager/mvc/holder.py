@@ -60,6 +60,5 @@ class MVCHolder:
         :param logger: log printing
         :return self
         """
-        for name in self.services:
-            self.services[name].set_logger(logger)
+        self.session.engine().set_logger(logger)
         return self
