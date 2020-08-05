@@ -8,7 +8,4 @@ MySQL query tool class used by python.
 * Need tabledbmapper 0.0.1
 
 2.1.4
-* Need tabledbmapper 0.1.4
-
-2.2.4
-* Need tabledbmapper 0.1.4
+* Need tabledbmapper 0.1.4 or 0.1.5
