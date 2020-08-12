@@ -1,9 +1,9 @@
 from tabledbmapper.logger import DefaultLogger
-from tabledbmapper.manager.mvc.service import Service
 from tabledbmapper.manager.session.sql_session_factory import SQLSessionFactory, SQLSessionFactoryBuild
 
 from mysqlmapper.engine import MySQLConnHandle, MySQLExecuteEngine, MySQLConnBuilder
 from mysqlmapper.manager.mvc.holder import MVCHolder
+from mysqlmapper.manager.mvc.service import Service
 
 
 class MySQLSessionFactory(SQLSessionFactory):

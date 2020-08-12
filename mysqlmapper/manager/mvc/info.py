@@ -4,6 +4,7 @@ from tabledbmapper.engine import TemplateEngine
 from tabledbmapper.manager.manager import Manager
 from tabledbmapper.manager.xml_config import parse_config_from_string
 
+# noinspection SpellCheckingInspection
 _table_xml = """
 <xml>
     <mapper column="TABLE_NAME" parameter="Name"/>
@@ -25,6 +26,7 @@ _table_xml = """
 </xml>
 """
 
+# noinspection SpellCheckingInspection
 _column_xml = """
 <xml>
     <mapper column="ORDINAL_POSITION" parameter="Number"/>
@@ -99,6 +101,7 @@ _key_xml = """
 DataBaseInfo = Dict
 
 
+# noinspection SpellCheckingInspection
 def get_db_info(template_engine: TemplateEngine, database_name: str) -> DataBaseInfo:
     """
     Get database information

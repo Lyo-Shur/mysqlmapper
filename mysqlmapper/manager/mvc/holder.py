@@ -1,13 +1,13 @@
 from tabledbmapper.logger import DefaultLogger, Logger
 from tabledbmapper.manager.manager import Manager
-from tabledbmapper.manager.mvc.dao import DAO
-from tabledbmapper.manager.mvc.service import Service
 from tabledbmapper.manager.session.sql_session import SQLSession
 from tabledbmapper.manager.xml_config import parse_config_from_string
 
 from mysqlmapper.engine import MySQLConnBuilder, MySQLTemplateEngine
+from mysqlmapper.manager.mvc.dao import DAO
 from mysqlmapper.manager.mvc.info import get_db_info
 from mysqlmapper.manager.mvc.mapper import get_mapper_xml
+from mysqlmapper.manager.mvc.service import Service
 
 
 class MVCHolder:

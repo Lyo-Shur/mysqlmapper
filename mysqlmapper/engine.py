@@ -107,6 +107,7 @@ class MySQLExecuteEngine(ExecuteEngine):
         for value in result[0].values():
             return value
 
+    # noinspection SpellCheckingInspection
     def exec(self, conn: pymysql.Connection, logger: Logger, sql: str, parameter: list) -> ExecResult:
         """
         Execute SQL statement
