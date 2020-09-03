@@ -180,7 +180,7 @@ _mapper_xml = """
         {% endif %}
     {% endfor %}
             1 = 1
-            LIMIT #{ mysql_mapper_limit_start }, #{ mysql_mapper_limit_length }
+            LIMIT 0, 1
         </value>
     </sql>
     <sql>

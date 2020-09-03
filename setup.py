@@ -1,9 +1,10 @@
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
+    # noinspection SpellCheckingInspection
     setup(
         name="mysqlmapper",
-        version="2.2.1",
+        version="2.2.2",
         description=(
             "MySQL query tool class used by python."
         ),
@@ -33,7 +34,7 @@ with open("README.md", "r") as fh:
             'Topic :: Software Development :: Libraries'
         ],
         install_requires=[
-            'tabledbmapper',
+            'tabledbmapper==0.2.1',
             'PyMySQL',
         ],
         zip_safe=False
