@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     # noinspection SpellCheckingInspection
     setup(
         name="mysqlmapper",
-        version="2.2.2",
+        version="2.2.4",
         description=(
             "MySQL query tool class used by python."
         ),

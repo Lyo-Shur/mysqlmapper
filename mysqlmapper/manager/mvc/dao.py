@@ -73,7 +73,10 @@ class DAO:
         :param parameter: Search parameters
         :return: Number > 0
         """
-        return self._manager.count(self._exist, parameter) > 0
+        query_parameter = parameter.copy()
+        query_parameter["mysql_mapper_limit_start"] = 0
+        query_parameter["mysql_mapper_limit_length"] = 1
+        return self._manager.count(self._exist, query_parameter) > 0
 
     def get_model(self, parameter: Dict) -> Dict:
         """
